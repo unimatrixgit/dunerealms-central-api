@@ -1,6 +1,6 @@
 import {randomUUID} from 'node:crypto';
 import type {BankAgent} from './bank-agent.js';
-import {createOwnBankReader,type IdentityResolver} from './bank-access.js';
+import type {IdentityResolver} from './bank-access.js';
 
 export interface WebsitePrincipal {accountId:string;}
 export interface WebsiteBankDependencies {
@@ -19,7 +19,6 @@ export interface WebsiteBankDependencies {
  */
 export function createSessionBankHandler(deps:WebsiteBankDependencies){
  const origin=new URL(deps.origin).origin;
- const read=createOwnBankReader(deps.identity,deps.bank);
  return async function handle(request:Request):Promise<Response|null>{
   const url=new URL(request.url);
   if(url.pathname!=='/api/v1/me/bank')return null;
@@ -38,13 +37,15 @@ export function createSessionBankHandler(deps:WebsiteBankDependencies){
    if(!principal||!principal.accountId)return error(401,'unauthenticated');
    if(!await deps.canReadPersonalBank(principal))return error(403,'permission_denied');
    const initialLink=await deps.identity.resolveVerifiedIdentity(principal.accountId);
-   const snapshot=await read(principal.accountId);
+   if(initialLink&&(initialLink.verified!==true||initialLink.accountId!==principal.accountId||
+      !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(initialLink.playerUuid)))return error(503,'bank_unavailable');
+   const snapshot=initialLink?await deps.bank.readOwnBalance(initialLink.playerUuid):null;
    const current=await deps.authenticate(request);
    if(!current||current.accountId!==principal.accountId)return error(401,'session_changed');
    if(!await deps.canReadPersonalBank(current))return error(403,'permission_changed');
    const currentLink=await deps.identity.resolveVerifiedIdentity(current.accountId);
    if(initialLink?.playerUuid!==currentLink?.playerUuid||
-      (snapshot&&(!currentLink||currentLink.accountId!==current.accountId)))return error(409,'account_link_changed');
+      (currentLink&&currentLink.accountId!==current.accountId))return error(409,'account_link_changed');
    if(!snapshot)return Response.json({data:{linked:false},meta:{requestId}},{headers});
    return Response.json({data:{linked:true,bank:snapshot},meta:{requestId}},{headers});
   }catch{return error(503,'bank_unavailable');}
