@@ -66,3 +66,36 @@ test('identity mismatch and bank outage are sanitized',async()=>{
  assert.equal(response?.status,503);
  assert.ok(!JSON.stringify(await response?.json()).includes('secret'));
 });
+
+test('session revoked during bank read never returns balances',async()=>{
+ let authCalls=0;
+ const f=fixture({async authenticate(){return ++authCalls===1?{accountId:'alice'}:null;}});
+ const response=await f.req();
+ assert.equal(response?.status,401);
+ assert.equal(f.getReads(),1);
+});
+test('permission revoked during bank read never returns balances',async()=>{
+ let checks=0;
+ const f=fixture({async canReadPersonalBank(){return ++checks===1;}});
+ const response=await f.req();
+ assert.equal(response?.status,403);
+ assert.equal(f.getReads(),1);
+});
+test('Minecraft link changed during bank read never returns balances',async()=>{
+ let links=0;
+ const f=fixture({identity:{async resolveVerifiedIdentity(accountId:string){
+  links++;return {accountId,playerUuid:links===1?uuid:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',verified:true as const};
+ }}});
+ const response=await f.req();
+ assert.equal(response?.status,409);
+ assert.equal(f.getReads(),1);
+});
+test('no linked account is not allowed to gain a link during read',async()=>{
+ let links=0;
+ const f=fixture({identity:{async resolveVerifiedIdentity(accountId:string){
+  links++;return links===1?null:{accountId,playerUuid:uuid,verified:true as const};
+ }}});
+ const response=await f.req();
+ assert.equal(response?.status,409);
+ assert.equal(f.getReads(),0);
+});
