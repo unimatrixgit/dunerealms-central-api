@@ -1,0 +1,29 @@
+name: Central API release candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feature/api-v1-foundation', 'main']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts
+      - run: npm test
+      - name: Create candidate archive
+        run: |
+          mkdir -p release
+          cp -R dist integrations docs release/
+          cp package.json release/
+          git rev-parse HEAD > release/COMMIT
+          tar -czf dunerealms-central-api-candidate.tar.gz -C release .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dunerealms-central-api-candidate
+          path: dunerealms-central-api-candidate.tar.gz
+          retention-days: 14
