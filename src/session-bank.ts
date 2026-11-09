@@ -38,6 +38,13 @@ export function createSessionBankHandler(deps:WebsiteBankDependencies){
    if(!principal||!principal.accountId)return error(401,'unauthenticated');
    if(!await deps.canReadPersonalBank(principal))return error(403,'permission_denied');
    const snapshot=await read(principal.accountId);
+   const current=await deps.authenticate(request);
+   if(!current||current.accountId!==principal.accountId)return error(401,'session_changed');
+   if(!await deps.canReadPersonalBank(current))return error(403,'permission_changed');
+   const currentLink=await deps.identity.resolveVerifiedIdentity(current.accountId);
+   if(snapshot&&(!currentLink||currentLink.accountId!==current.accountId||
+      currentLink.playerUuid!== (await deps.identity.resolveVerifiedIdentity(principal.accountId))?.playerUuid))return error(409,'account_link_changed');
+   if(!snapshot&&currentLink)return error(409,'account_link_changed');
    if(!snapshot)return Response.json({data:{linked:false},meta:{requestId}},{headers});
    return Response.json({data:{linked:true,bank:snapshot},meta:{requestId}},{headers});
   }catch{return error(503,'bank_unavailable');}
