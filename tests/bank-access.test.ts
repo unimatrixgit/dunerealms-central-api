@@ -6,7 +6,7 @@ const uuid='12345678-1234-4234-9234-123456789012';
 test('bank access resolves verified UUID from server-side identity service',async()=>{
  const seen:string[]=[];
  const reader=createOwnBankReader({async resolveVerifiedIdentity(accountId){assert.equal(accountId,'alice');return {accountId,playerUuid:uuid,verified:true};}},
-  {async readOwnBalance(playerUuid){seen.push(playerUuid);return {current:'10.00',savings:'20.00',currency:'Dunemarks'};}});
+  {async readOwnBalance(playerUuid){seen.push(playerUuid);return {current:'10.00',savings:'20.00',currency:'Dunemarks' as const,ledger:[],currentLedger:[]};}});
  assert.equal((await reader('alice'))?.current,'10.00');
  assert.deepEqual(seen,[uuid]);
 });
