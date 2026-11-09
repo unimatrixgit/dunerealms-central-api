@@ -7,14 +7,22 @@ const token='a'.repeat(43),digest=createHash('sha256').update(token).digest('hex
 const uuid='12345678-1234-4234-9234-123456789012';
 function database({expired=false,unverified=false}={}){
  const queries:string[]=[];
- const db={prepare(sql:string){
-  queries.push(sql);
-  return {bind(...values:unknown[]){return {async first(){
-   if(sql.includes('site_sessions'))return values[0]===digest&&!expired?{id:'alice'}:null;
-   if(sql.includes('site_game_links'))return values[0]==='alice'&&!unverified?{user_id:'alice',minecraft_uuid:uuid}:null;
-   throw Error('Unexpected query');
-  }};}}};
- }};
+ const db={
+  prepare(sql:string){
+   queries.push(sql);
+   return {
+    bind(...values:unknown[]){
+     return {
+      async first():Promise<Record<string,unknown>|null>{
+       if(sql.includes('site_sessions'))return values[0]===digest&&!expired?{id:'alice'}:null;
+       if(sql.includes('site_game_links'))return values[0]==='alice'&&!unverified?{user_id:'alice',minecraft_uuid:uuid}:null;
+       throw Error('Unexpected query');
+      }
+     };
+    }
+   };
+  }
+ };
  return {db,queries};
 }
 test('DuneHub session authentication uses SHA-256 token lookup and expiration',async()=>{
