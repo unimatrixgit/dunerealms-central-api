@@ -15,11 +15,11 @@ test('private read forwards only verified UUID and private token',async()=>{
   called=true;
   assert.equal(url,'http://127.0.0.1:15433/bank/player?uuid='+uuid);
   assert.equal(new Headers(options?.headers).get('Authorization'),'Bearer '+token);
-  return Response.json({currentDunemarks:'123.45',savingsDunemarks:'9007199254740993.12',privateKey:'secret'});
+  return Response.json({playerUuid:uuid,currency:'dunemarks',walletDunemarks:'123.45',balanceDunemarks:'9007199254740993.12',ledger:[{id:'1',action:'deposit',amountDunemarks:'10.00',balanceDunemarks:'20.00',createdAt:123,reference:'ref',memo:'test'}],currentLedger:[],privateKey:'secret'});
  }});
  const result=await bank.readOwnBalance(uuid);
  assert.equal(called,true);
- assert.deepEqual(result,{current:'123.45',savings:'9007199254740993.12',currency:'Dunemarks'});
+ assert.deepEqual(result,{current:'123.45',savings:'9007199254740993.12',currency:'Dunemarks',ledger:[{id:'1',action:'deposit',amountDunemarks:'10.00',balanceDunemarks:'20.00',createdAt:123,reference:'ref',memo:'test'}],currentLedger:[]});
  assert.ok(!JSON.stringify(result).includes('secret'));
 });
 test('invalid identities, malformed responses and outages fail closed',async()=>{
