@@ -34,6 +34,9 @@ test('DuneHub session authentication uses SHA-256 token lookup and expiration',a
  assert.equal(await auth(request('__Host-dune_session='+token+'; __Host-dune_session='+token)),null);
  assert.equal(await createDuneHubSessionAuth(database({expired:true}).db)(request('__Host-dune_session='+token)),null);
  assert.ok(queries[0].includes('expires_at>?'));
+ assert.ok(queries[0].includes("a.password_hash NOT LIKE '!%'"));
+ assert.ok(queries[0].includes("a.role<>'memorial'"));
+ assert.ok(queries[0].includes('cp_account_ranks'));
 });
 test('verified Minecraft link is account-bound and requires persistent identity',async()=>{
  const {db,queries}=database();
@@ -41,7 +44,7 @@ test('verified Minecraft link is account-bound and requires persistent identity'
  assert.deepEqual(await resolve.resolveVerifiedIdentity('alice'),{accountId:'alice',playerUuid:uuid,verified:true});
  assert.equal(await resolve.resolveVerifiedIdentity('bob'),null);
  assert.equal(await createDuneHubIdentityResolver(database({unverified:true}).db).resolveVerifiedIdentity('alice'),null);
- assert.ok(queries[0].includes('JOIN site_game_identities'));
+ assert.ok(queries[0].includes('FROM site_game_links WHERE user_id=?'));
 });
 test('bank permission must be explicitly granted by deployed action resolver',async()=>{
  const seen:string[]=[];
