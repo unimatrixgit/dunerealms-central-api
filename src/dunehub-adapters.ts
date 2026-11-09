@@ -16,7 +16,7 @@ export function createDuneHubSessionAuth(db:ReadDatabase,now:()=>number=Date.now
   const token=matches[0].slice('__Host-dune_session='.length);
   if(!/^[A-Za-z0-9_-]{43}$/.test(token))return null;
   const digest=createHash('sha256').update(token).digest('hex');
-  const row=await db.prepare('SELECT a.id FROM site_sessions s JOIN site_accounts a ON a.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? AND a.password_hash NOT LIKE '!%' AND a.role<>'memorial' AND NOT EXISTS(SELECT 1 FROM cp_account_ranks r WHERE r.user_id=a.id AND r.rank_key='memorial')').bind(digest,now()).first();
+  const row=await db.prepare(`SELECT a.id FROM site_sessions s JOIN site_accounts a ON a.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? AND a.password_hash NOT LIKE '!%' AND a.role<>'memorial' AND NOT EXISTS(SELECT 1 FROM cp_account_ranks r WHERE r.user_id=a.id AND r.rank_key='memorial')`).bind(digest,now()).first();
   return typeof row?.id==='string'&&row.id.length>0?{accountId:row.id}:null;
  };
 }
