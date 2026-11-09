@@ -12,7 +12,7 @@ export interface BankAgentOptions {
  fetcher?:typeof fetch;
 }
 const decimal=/^(?:0|[1-9][0-9]{0,17})(?:\.[0-9]{1,2})?$/;
-const uuid=/^[0-9a-f]{8}-(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
+const uuid=/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 export class BankUnavailable extends Error {
  constructor(){super('Bank temporarily unavailable');}
 }
