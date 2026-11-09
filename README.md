@@ -1,32 +1,26 @@
 # DuneRealms Central API
 
-Development and integration documentation for the DuneRealms Central API.
+This is the **dedicated development repository** for the DuneRealms Central API.
 
-## Status
+## Published API v1 foundation
 
-The existing API v1 foundation is in DuneGit `apidev/MC`, branch `feature/api-v1-foundation`, commit `f787da9`. It was developed against an older MC website snapshot and is **not deployed**. The original source has not yet been imported into this GitHub repository.
+The existing read-only DuneHub gateway implementation was copied from `unimatrixgit/mca`, branch `feature/central-api-v1`, into [integrations/dunehub](integrations/dunehub). It provides:
 
-The foundation provides five session-authenticated read-only endpoints:
+- `GET /api/v1/me` — current website account
+- `GET /api/v1/me/minecraft` — linked Minecraft identity
+- `GET /api/v1/me/permissions` — legacy effective permissions
+- `GET /api/v1/servers` — server status
+- `GET /api/v1/catalogue` — native exchange catalogue
 
-- `GET /api/v1/me`
-- `GET /api/v1/me/minecraft`
-- `GET /api/v1/me/permissions`
-- `GET /api/v1/servers`
-- `GET /api/v1/catalogue`
+**Important:** The imported module is a DuneHub integration, **not yet a standalone runnable API service**. It depends on `website/node/auth.mjs`, `permissions.mjs` and `world-status.mjs` from the MC website repository. Its tests likewise depend on the original DuneHub test fixtures and must be run within that source tree. Do not claim this repository has passed tests or is deployed.
 
-It is default-off behind `API_V1_ENABLED=true`. The development report states 29 fixture tests passed; production integration is unverified.
+The integration is **disabled by default** and requires `API_V1_ENABLED=true` in a staging environment. No bank transfers or other financial mutations are enabled.
 
-## Bank integration
+## Next development
 
-The existing DuneHub website sends `POST /api/bank/transfer-own` to its internal Python agent through a private SSH tunnel. The agent invokes `bank_transfers.transfer()`, using the existing MySQL-compatible `dunegameplay` database.
+1. Extract a standalone Node.js/TypeScript service with explicit interfaces for identity, permission resolution and backend adapters.
+2. Add independent contract tests and CI.
+3. Reconcile with the deployed DuneHub version before wiring it to production.
+4. Add read-only bank integration, then separately validate transactional transfer behavior in isolated staging.
 
-The own-account transfer implementation uses SQL transactions, locked account rows, durable request-ID deduplication, and paired ledger entries. The reported transfer failure is still **unresolved**. Do not create a second wallet or directly modify live balances.
-
-See [Bank integration contract](docs/BANK-INTEGRATION.md) and [Migration plan](docs/MIGRATION.md).
-
-## Sources
-
-- [API foundation](https://www.dunerealms.com/git/apidev/MC/src/branch/feature/api-v1-foundation)
-- [Upstream DuneRealms](https://www.dunerealms.com/git/unimatrix/MC)
-
-Never commit secrets, private keys, production database exports or player data.
+The original bank integration and migration notes are in [docs](docs). Do not commit secrets or live player data.
