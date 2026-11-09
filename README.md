@@ -1,26 +1,45 @@
 # DuneRealms Central API
 
-This is the **dedicated development repository** for the DuneRealms Central API.
+Standalone Node.js 22+ / TypeScript gateway, developed independently from the Minecraft server and DuneHub.
 
-## Published API v1 foundation
+## Status
 
-The existing read-only DuneHub gateway implementation was copied from `unimatrixgit/mca`, branch `feature/central-api-v1`, into [integrations/dunehub](integrations/dunehub). It provides:
+**Development only — not deployed.** The service is default-off, binds to localhost only, and exposes no banking mutations.
 
-- `GET /api/v1/me` — current website account
-- `GET /api/v1/me/minecraft` — linked Minecraft identity
-- `GET /api/v1/me/permissions` — legacy effective permissions
-- `GET /api/v1/servers` — server status
-- `GET /api/v1/catalogue` — native exchange catalogue
+### Standalone endpoints
 
-**Important:** The imported module is a DuneHub integration, **not yet a standalone runnable API service**. It depends on `website/node/auth.mjs`, `permissions.mjs` and `world-status.mjs` from the MC website repository. Its tests likewise depend on the original DuneHub test fixtures and must be run within that source tree. Do not claim this repository has passed tests or is deployed.
+- `GET /healthz` — basic process health, no authentication
+- `GET /api/v1/status` — authenticated service status
+- `GET /api/v1/servers` — authenticated, sanitized world-status read from a fixed HTTPS monitor URL
 
-The integration is **disabled by default** and requires `API_V1_ENABLED=true` in a staging environment. No bank transfers or other financial mutations are enabled.
+The `/api/v1/*` endpoints currently use a private **service-to-service bearer token**, not a website login. Do not call them directly from browsers or mobile apps. The user-session gateway previously imported from MC is preserved separately in [integrations/dunehub](integrations/dunehub), but it is not yet connected to this standalone service.
 
-## Next development
+### Development
 
-1. Extract a standalone Node.js/TypeScript service with explicit interfaces for identity, permission resolution and backend adapters.
-2. Add independent contract tests and CI.
-3. Reconcile with the deployed DuneHub version before wiring it to production.
-4. Add read-only bank integration, then separately validate transactional transfer behavior in isolated staging.
+```bash
+npm install --ignore-scripts
+npm test
+npm run build
+```
 
-The original bank integration and migration notes are in [docs](docs). Do not commit secrets or live player data.
+Set environment variables using [`.env.example`](.env.example) as a guide (never commit real credentials). Start in a staging shell:
+
+```bash
+API_ENABLED=true API_SERVICE_TOKEN='<your-random-32+-character-secret>' npm start
+```
+
+The default listener is `127.0.0.1:18080`. `WORLD_STATUS_URL` is optional; without it, the servers endpoint returns 503. The upstream must use HTTPS and supply a recent `checkedAt` timestamp and `servers` object. Upstream fields are allowlisted; secrets are never forwarded.
+
+CI configuration is in [`.github/workflows/ci.yml`](.github/workflows/ci.yml). **Tests are committed but have not been verified as passing in this session.**
+
+## Integration plan
+
+1. Run TypeScript build and tests, fix any failures.
+2. Reconcile the current deployed DuneHub source and the verified Minecraft account link / scoped permission model.
+3. Add an authenticated user-session adapter (without accepting browser-provided UUIDs).
+4. Add **read-only** bank adapters against the existing Python bank agent, with independent authorization and contract tests.
+5. Diagnose the existing own-account transfer failure and test idempotency and ledger atomicity in isolated staging before enabling any mutation.
+
+See [bank contract](docs/BANK-INTEGRATION.md) and [migration plan](docs/MIGRATION.md).
+
+No production database or server has been changed.
