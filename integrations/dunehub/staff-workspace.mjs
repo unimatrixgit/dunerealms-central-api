@@ -7,8 +7,8 @@
 const LEADERS=[
  {name:'unimatrix',title:'Network Owner',scope:'Network-wide'},
  {name:'rich',title:'Network Administrator',scope:'Game + full Web administration'},
- {name:'grmacken',title:'Technical Administrator',scope:'Servers + full Web administration'},
- {name:'Mr Blueray',title:'Core Administrator',scope:'Game + Web operations · No development'}
+ {name:'grmacken',title:'Network Administrator',scope:'Servers + full Web administration'},
+ {name:'Mr Blueray',title:'Network Administrator',scope:'Game + Web operations · No development'}
 ];
 const DEPARTMENTS=[
  {id:'web',title:'Web',teams:[['community','Community & Support'],['ban_appeals','Ban Appeals'],['shop','Shop & Payments']]},
