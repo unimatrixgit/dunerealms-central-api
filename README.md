@@ -43,3 +43,7 @@ CI configuration is in [`.github/workflows/ci.yml`](.github/workflows/ci.yml). *
 See [bank contract](docs/BANK-INTEGRATION.md) and [migration plan](docs/MIGRATION.md).
 
 No production database or server has been changed.
+
+## Player services roadmap
+
+The staged twelve-feature plan for the Central API, DuneHub and Minecraft plugins is documented in [Player Services Roadmap](docs/PLAYER-SERVICES-ROADMAP.md). It preserves existing Exchange, bank, faction, permission and reward systems; the planned endpoints are not live by default.
