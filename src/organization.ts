@@ -4,17 +4,14 @@
  * Minecraft LuckPerms groups, and in-game political offices.
  */
 export const DEFAULT_DEPARTMENTS=[
- {id:'web',label:'Web Department',parentId:null,teams:['head_web']},
- {id:'web_development',label:'Web Development & IT',parentId:'web',teams:['website','api','infrastructure']},
- {id:'community',label:'Community & Support',parentId:'web',teams:['support','discord','community']},
- {id:'ban_appeals',label:'Ban Appeals',parentId:'web',teams:['appeals_lead','senior_review','review','trainees']},
- {id:'marketing',label:'Marketing & Media',parentId:'web',teams:['social_media','creators','promotion']},
- {id:'finance',label:'Finance & Shop',parentId:'web',teams:['rank_shop','payments','audit']},
- {id:'game',label:'Game Department',parentId:null,teams:['head_game']},
- {id:'game_admin',label:'Game Administration',parentId:'game',teams:['administration','moderation','anti_cheat']},
- {id:'game_design',label:'Game Design',parentId:'game',teams:['factions','economy','quests','balancing']},
- {id:'game_events',label:'In-game Events',parentId:'game',teams:['events','tournaments']},
- {id:'player_assistance',label:'Player Assistance',parentId:'game',teams:['helpers','player_support']}
+ {id:'web',label:'Web',parentId:null,teams:['lead']},
+ {id:'community',label:'Community & Support',parentId:'web',teams:['support','discord','media']},
+ {id:'ban_appeals',label:'Ban Appeals',parentId:'web',teams:['lead','reviewers']},
+ {id:'shop',label:'Shop & Payments',parentId:'web',teams:['shop','payments']},
+ {id:'game',label:'Game',parentId:null,teams:['lead']},
+ {id:'moderation',label:'Moderation',parentId:'game',teams:['moderators','anti_cheat']},
+ {id:'events',label:'Events',parentId:'game',teams:['events']},
+ {id:'helpers',label:'Player Help',parentId:'game',teams:['helpers']}
 ] as const;
 export type Department={id:string;label:string;parentId:string|null;teams:string[]};
 export type DepartmentMembership={accountId:string;departmentId:string;teamId:string;title:string;lead:boolean};
