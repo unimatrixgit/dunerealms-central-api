@@ -3,14 +3,21 @@ import assert from 'node:assert/strict';
 import {LEADERSHIP,validateLeadership} from '../src/leadership.js';
 import {DEFAULT_DEPARTMENTS} from '../src/organization.js';
 const departments=new Set(DEFAULT_DEPARTMENTS.map(d=>d.id));
-test('owner and both administrators are assigned to correct branches',()=>{
- const entries=validateLeadership(LEADERSHIP,departments);
- assert.deepEqual(entries.find(x=>x.username==='unimatrix')?.departmentIds,['web','game']);
- assert.deepEqual(entries.find(x=>x.username==='rich')?.departmentIds,['game']);
- assert.deepEqual(entries.find(x=>x.username==='grmacken')?.departmentIds,['web']);
- assert.ok(entries.find(x=>x.username==='grmacken')?.responsibilities.includes('Server management'));
+test('four core staff members with equal operational web access for rich and grmacken',()=>{
+ const leaders=validateLeadership(LEADERSHIP,departments);
+ assert.equal(leaders.length,4);
+ assert.equal(leaders.find(x=>x.username==='unimatrix')?.webAccess,'owner');
+ for(const name of ['rich','grmacken']){
+  const leader=leaders.find(x=>x.username===name);
+  assert.equal(leader?.webAccess,'full_admin');
+  assert.deepEqual([...leader!.departmentIds].sort(),['game','web']);
+ }
+ const blueray=leaders.find(x=>x.displayName==='Mr Blueray');
+ assert.equal(blueray?.username,null);
+ assert.equal(blueray?.webAccess,'unassigned');
 });
-test('duplicate names and unknown departments are rejected',()=>{
+test('unknown departments, duplicate names and unverified admin identity fail closed',()=>{
  assert.throws(()=>validateLeadership([...LEADERSHIP,LEADERSHIP[0]],departments));
- assert.throws(()=>validateLeadership([{username:'someone',title:'Admin',departmentIds:['unknown'],responsibilities:[]}],departments));
+ assert.throws(()=>validateLeadership([{username:'other',displayName:'Other',title:'Admin',departmentIds:['unknown'],responsibilities:[],webAccess:'full_admin'}],departments));
+ assert.throws(()=>validateLeadership([{username:null,displayName:'Unverified',title:'Admin',departmentIds:['web'],responsibilities:[],webAccess:'full_admin'}],departments));
 });
