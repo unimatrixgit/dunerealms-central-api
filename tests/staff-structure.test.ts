@@ -6,8 +6,8 @@ const departments=DEFAULT_DEPARTMENTS.map(d=>({...d,teams:[...d.teams]}));
 const uuid='12345678-1234-4234-9234-123456789012';
 const accounts=[{accountId:'a',websiteRank:'staff',playerUuid:uuid},{accountId:'b',websiteRank:'vip',playerUuid:null}];
 const memberships=[
- {accountId:'a',departmentId:'ban_appeals',teamId:'reviewers',title:'Appeals reviewer',lead:false},
- {accountId:'a',departmentId:'events',teamId:'events',title:'Event helper',lead:false}
+ {accountId:'a',departmentId:'ban_appeals',teamId:'reviewer',title:'Appeals reviewer',lead:false},
+ {accountId:'a',departmentId:'events',teamId:'staff',title:'Event helper',lead:false}
 ];
 const mappings=[{websiteRank:'staff',minecraftGroups:['helper','moderator'],version:0}];
 test('retains existing website rank and permits cross-department membership',()=>{
