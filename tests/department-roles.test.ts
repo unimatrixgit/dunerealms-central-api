@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {departmentPermissions,planDepartmentRoleChange,validateRoleAssignments} from '../src/department-roles.js';
+import {departmentPermissions,planDepartmentRoleChange,validateRoleAssignments,type DepartmentRoleKey} from '../src/department-roles.js';
 const actor='owner',account='alice';
-const allowed=new Set(['shop.manager','exchange.staff','tickets.agent'] as const);
+const allowed=new Set<DepartmentRoleKey>(['shop.manager','exchange.staff','tickets.agent']);
 test('staff can have Shop and Tickets without Exchange',()=>{
  const assignments=[
   {accountId:account,role:'shop.manager' as const},
