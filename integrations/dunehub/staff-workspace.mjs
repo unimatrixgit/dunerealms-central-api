@@ -4,7 +4,12 @@
  * Department roster is a visual blueprint until the membership API is deployed.
  * No invented account assignments or extra permissions.
  */
-const LEADERS=[{name:'unimatrix',title:'Network Owner',scope:'Network'}, {name:'grmacken',title:'Technical Administrator',scope:'Web, servers and infrastructure'}, {name:'rich',title:'Network Operations Administrator',scope:'Game and Web operations'}];
+const LEADERS=[
+ {name:'unimatrix',title:'Network Owner',scope:'Network-wide'},
+ {name:'rich',title:'Network Administrator',scope:'Game + full Web administration'},
+ {name:'grmacken',title:'Technical Administrator',scope:'Servers + full Web administration'},
+ {name:'Mr Blueray',title:'Core Administrator',scope:'Core team · specialization pending'}
+];
 const DEPARTMENTS=[
  {id:'web',title:'Web',teams:[['community','Community & Support'],['ban_appeals','Ban Appeals'],['shop','Shop & Payments']]},
  {id:'game',title:'Game',teams:[['moderation','Moderation'],['events','Events'],['helpers','Player Help']]}
