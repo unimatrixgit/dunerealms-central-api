@@ -7,7 +7,7 @@ export const LEADERSHIP=[
  {username:'unimatrix',displayName:'unimatrix',title:'Network Owner',departmentIds:['web','game'],responsibilities:['Network ownership','Final approval'],webAccess:'owner'},
  {username:'rich',displayName:'rich',title:'Network Administrator',departmentIds:['web','game'],responsibilities:['Game operations','Moderation oversight','Full operational website administration'],webAccess:'full_admin'},
  {username:'grmacken',displayName:'grmacken',title:'Technical Administrator',departmentIds:['web','game'],responsibilities:['Server development','Server management','Full operational website administration'],webAccess:'full_admin'},
- {username:null,displayName:'Mr Blueray',title:'Core Administrator',departmentIds:['web','game'],responsibilities:['Core team; specialization to be confirmed'],webAccess:'unassigned'}
+ {username:null,displayName:'Mr Blueray',title:'Core Administrator',departmentIds:['web','game'],responsibilities:['Game operations','Website operations','No development responsibilities'],webAccess:'unassigned'}
 ] as const;
 export type LeadershipEntry={
  username:string|null;displayName:string;title:string;departmentIds:readonly string[];
