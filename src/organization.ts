@@ -12,7 +12,6 @@ export const DEFAULT_DEPARTMENTS=[
  {id:'finance',label:'Finance & Shop',parentId:'web',teams:['rank_shop','payments','audit']},
  {id:'game',label:'Game Department',parentId:null,teams:['head_game']},
  {id:'game_admin',label:'Game Administration',parentId:'game',teams:['administration','moderation','anti_cheat']},
- {id:'game_development',label:'Game Development',parentId:'game',teams:['plugins','worldgen','server_systems']},
  {id:'game_design',label:'Game Design',parentId:'game',teams:['factions','economy','quests','balancing']},
  {id:'game_events',label:'In-game Events',parentId:'game',teams:['events','tournaments']},
  {id:'player_assistance',label:'Player Assistance',parentId:'game',teams:['helpers','player_support']}
