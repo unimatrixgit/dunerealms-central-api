@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DEFAULT_DEPARTMENTS,organizationChart,validateOrganization} from '../src/organization.js';
 const departments=DEFAULT_DEPARTMENTS.map(d=>({...d,teams:[...d.teams]}));
-test('organigram contains six departments and their teams',()=>{
+test('organigram contains seven departments and their teams',()=>{
  const chart=organizationChart(departments,[]);
- assert.equal(chart.length,6);
+ assert.equal(chart.length,7);
  assert.ok(chart.find(d=>d.id==='development')?.teams.some(t=>t.id==='api'));
+ assert.ok(chart.find(d=>d.id==='ban_appeals')?.teams.some(t=>t.id==='review'));
+ assert.ok(!chart.find(d=>d.id==='game_admin')?.teams.some(t=>t.id==='review'));
 });
 test('one staff account can join multiple departments without changing ranks',()=>{
  const chart=organizationChart(departments,[
