@@ -5,13 +5,15 @@
  */
 export const DEFAULT_DEPARTMENTS=[
  {id:'web',label:'Web',parentId:null,teams:['lead']},
- {id:'community',label:'Community & Support',parentId:'web',teams:['support','discord','media']},
- {id:'ban_appeals',label:'Ban Appeals',parentId:'web',teams:['lead','reviewers']},
- {id:'shop',label:'Shop & Payments',parentId:'web',teams:['shop','payments']},
+ {id:'community',label:'Community',parentId:'web',teams:['discord','media']},
+ {id:'tickets',label:'Tickets',parentId:'web',teams:['manager','agent']},
+ {id:'exchange',label:'Exchange',parentId:'web',teams:['manager','staff']},
+ {id:'ban_appeals',label:'Ban Appeals',parentId:'web',teams:['lead','reviewer']},
+ {id:'shop',label:'Shop & Payments',parentId:'web',teams:['manager','staff']},
  {id:'game',label:'Game',parentId:null,teams:['lead']},
- {id:'moderation',label:'Moderation',parentId:'game',teams:['moderators','anti_cheat']},
- {id:'events',label:'Events',parentId:'game',teams:['events']},
- {id:'helpers',label:'Player Help',parentId:'game',teams:['helpers']}
+ {id:'moderation',label:'Moderation',parentId:'game',teams:['lead','moderator','anti_cheat']},
+ {id:'events',label:'Events',parentId:'game',teams:['coordinator','staff']},
+ {id:'helpers',label:'Player Help',parentId:'game',teams:['lead','helper']}
 ] as const;
 export type Department={id:string;label:string;parentId:string|null;teams:string[]};
 export type DepartmentMembership={accountId:string;departmentId:string;teamId:string;title:string;lead:boolean};
