@@ -2,17 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DEFAULT_DEPARTMENTS,organizationChart,validateOrganization} from '../src/organization.js';
 const departments=DEFAULT_DEPARTMENTS.map(d=>({...d,teams:[...d.teams]}));
-test('organigram contains seven departments and their teams',()=>{
+test('organigram separates Web and Game departments and their teams',()=>{
  const chart=organizationChart(departments,[]);
- assert.equal(chart.length,7);
- assert.ok(chart.find(d=>d.id==='development')?.teams.some(t=>t.id==='api'));
+ assert.equal(chart.length,12);
+ assert.deepEqual(chart.filter(d=>d.parentId===null).map(d=>d.id),['web','game']);
+ assert.ok(chart.find(d=>d.id==='web_development')?.teams.some(t=>t.id==='api'));
+ assert.equal(chart.find(d=>d.id==='ban_appeals')?.parentId,'web');
  assert.ok(chart.find(d=>d.id==='ban_appeals')?.teams.some(t=>t.id==='review'));
  assert.ok(!chart.find(d=>d.id==='game_admin')?.teams.some(t=>t.id==='review'));
 });
 test('one staff account can join multiple departments without changing ranks',()=>{
  const chart=organizationChart(departments,[
-  {accountId:'alice',departmentId:'development',teamId:'api',title:'API developer',lead:true},
-  {accountId:'alice',departmentId:'community',teamId:'events',title:'Event organizer',lead:false}
+  {accountId:'alice',departmentId:'web_development',teamId:'api',title:'API developer',lead:true},
+  {accountId:'alice',departmentId:'game_events',teamId:'events',title:'Event organizer',lead:false}
  ]);
  assert.equal(chart.filter(d=>d.teams.some(t=>t.members.some(m=>m.accountId==='alice'))).length,2);
 });
