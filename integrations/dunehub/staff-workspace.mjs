@@ -4,6 +4,7 @@
  * Department roster is a visual blueprint until the membership API is deployed.
  * No invented account assignments or extra permissions.
  */
+const LEADERS=[{name:'unimatrix',title:'Network Owner',scope:'Network'}, {name:'grmacken',title:'Web Administrator & Server Developer',scope:'Web and infrastructure'}, {name:'rich',title:'Game Administrator',scope:'Game'}];
 const DEPARTMENTS=[
  {id:'web',title:'Web',teams:[['community','Community & Support'],['ban_appeals','Ban Appeals'],['shop','Shop & Payments']]},
  {id:'game',title:'Game',teams:[['moderation','Moderation'],['events','Events'],['helpers','Player Help']]}
@@ -20,6 +21,9 @@ export function mountStaffWorkspace({dashboard=document.getElementById('dashboar
  const section=el('section');section.id='staff-workspace';section.hidden=true;
  section.append(el('p','STAFF WORKSPACE','eyebrow'),el('h2','People & departments'));
  const intro=el('p','Website ranks control access. Minecraft groups are managed separately. Departments show how the team is organized; they do not grant permissions.','muted');section.append(intro);
+ const leadership=el('div',undefined,'staff-org');
+ for(const person of LEADERS){const card=el('article',undefined,'staff-org-department');card.append(el('strong',person.name),el('p',person.title),el('p',person.scope,'muted'));leadership.append(card);}
+ section.append(el('h3','Leadership'),leadership);
  const org=el('div',undefined,'staff-org');
  for(const department of DEPARTMENTS){
   const card=el('article',undefined,'staff-org-department');
