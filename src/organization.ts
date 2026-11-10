@@ -6,6 +6,7 @@
 export const DEFAULT_DEPARTMENTS=[
  {id:'development',label:'Development & IT',parentId:null,teams:['plugins','website','api','infrastructure']},
  {id:'game_admin',label:'Game Administration',parentId:null,teams:['administration','moderation','anti_cheat']},
+ {id:'ban_appeals',label:'Ban Appeals',parentId:null,teams:['appeals_lead','senior_review','review','trainees']},
  {id:'community',label:'Community',parentId:null,teams:['support','events','discord']},
  {id:'marketing',label:'Marketing & Media',parentId:null,teams:['social_media','creators','promotion']},
  {id:'game_design',label:'Game Design',parentId:null,teams:['factions','economy','quests','balancing']},
