@@ -4,8 +4,9 @@ import {DEFAULT_DEPARTMENTS,organizationChart,validateOrganization} from '../src
 const departments=DEFAULT_DEPARTMENTS.map(d=>({...d,teams:[...d.teams]}));
 test('organigram separates Web and Game departments and their teams',()=>{
  const chart=organizationChart(departments,[]);
- assert.equal(chart.length,12);
+ assert.equal(chart.length,11);
  assert.deepEqual(chart.filter(d=>d.parentId===null).map(d=>d.id),['web','game']);
+ assert.equal(chart.some(d=>d.id==='game_development'),false);
  assert.ok(chart.find(d=>d.id==='web_development')?.teams.some(t=>t.id==='api'));
  assert.equal(chart.find(d=>d.id==='ban_appeals')?.parentId,'web');
  assert.ok(chart.find(d=>d.id==='ban_appeals')?.teams.some(t=>t.id==='review'));
