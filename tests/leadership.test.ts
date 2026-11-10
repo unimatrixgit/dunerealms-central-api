@@ -6,6 +6,8 @@ const departments=new Set(DEFAULT_DEPARTMENTS.map(d=>d.id));
 test('four core staff members with equal operational web access for rich and grmacken',()=>{
  const leaders=validateLeadership(LEADERSHIP,departments);
  assert.equal(leaders.length,4);
+ assert.equal(leaders.find(x=>x.username==='unimatrix')?.title,'Network Owner');
+ assert.deepEqual([...new Set(leaders.filter(x=>x.displayName!=='unimatrix').map(x=>x.title))],['Network Administrator']);
  assert.equal(leaders.find(x=>x.username==='unimatrix')?.webAccess,'owner');
  for(const name of ['rich','grmacken']){
   const leader=leaders.find(x=>x.username===name);
