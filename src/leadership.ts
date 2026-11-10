@@ -5,7 +5,7 @@
  */
 export const LEADERSHIP=[
  {username:'unimatrix',title:'Network Owner',departmentIds:['web','game'],responsibilities:['Network ownership','Final approval']},
- {username:'rich',title:'Game Administrator',departmentIds:['game'],responsibilities:['Game operations','Moderation oversight']},
+ {username:'rich',title:'Game Administrator & Web Staff',departmentIds:['game','web'],responsibilities:['Game operations','Moderation oversight','Website operations']},
  {username:'grmacken',title:'Web Administrator & Server Developer',departmentIds:['web'],responsibilities:['Website administration','Server development','Server management']}
 ] as const;
 export type LeadershipEntry={
