@@ -11,7 +11,7 @@ const LEADERS=[
  {name:'Mr Blueray',title:'Network Administrator',scope:'Game + Web operations · No development'}
 ];
 const DEPARTMENTS=[
- {id:'web',title:'Web',teams:[['community','Community & Support'],['ban_appeals','Ban Appeals'],['shop','Shop & Payments']]},
+ {id:'web',title:'Web',teams:[['community','Community'],['tickets','Tickets'],['ban_appeals','Ban Appeals'],['shop','Shop & Payments'],['exchange','Exchange']]},
  {id:'game',title:'Game',teams:[['moderation','Moderation'],['events','Events'],['helpers','Player Help']]}
 ];
 const el=(tag,text,className)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;};
@@ -38,7 +38,7 @@ export function mountStaffWorkspace({dashboard=document.getElementById('dashboar
   card.append(teams);org.append(card);
  }
  section.append(org);
- const hint=el('p','Department assignments are not yet connected to the account database. No members are shown until the roster API is available.','muted');
+ const hint=el('p','Shop, Exchange and Tickets have independent staff roles. Assignment controls will appear after the secured membership API is connected; no permissions are granted by this preview.','muted');
  section.append(hint);
  const controls=el('div',undefined,'staff-account-controls');
  const heading=el('h3','Account management'),search=el('input'),filter=el('select'),refresh=el('button','Refresh');
