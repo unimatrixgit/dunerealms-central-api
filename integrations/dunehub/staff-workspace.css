@@ -1,0 +1,15 @@
+/* DuneHub staff workspace — additive, mobile-first */
+#staff-workspace .staff-org{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0}
+#staff-workspace .staff-org-department{padding:20px;border:1px solid #987c49;background:#1b352b}
+#staff-workspace .staff-org-department h3{margin:0 0 14px}
+#staff-workspace .staff-org-department ul{padding-left:22px;margin:0;line-height:2}
+#staff-workspace .staff-account-controls{margin-top:30px}
+#staff-workspace .staff-account-controls>input,#staff-workspace .staff-account-controls>select{width:100%;max-width:360px;min-height:44px;margin:8px 10px 8px 0;padding:10px;background:#102820;color:#f3e5c6;border:1px solid #987c49}
+#staff-workspace .staff-account-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:18px}
+#staff-workspace .staff-account-card{border:1px solid #987c49;background:#1b352b;padding:16px;min-width:0}
+#staff-workspace .staff-account-title{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+#staff-workspace .staff-rank{border:1px solid #987c49;padding:2px 8px;color:#e6c27b;font-size:12px}
+#staff-workspace .staff-account-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#staff-workspace .staff-account-actions select{min-height:42px;max-width:100%;padding:8px;background:#102820;color:#f3e5c6;border:1px solid #987c49}
+#staff-workspace button:focus-visible,#staff-workspace input:focus-visible,#staff-workspace select:focus-visible{outline:3px solid #e6c27b;outline-offset:2px}
+@media(max-width:700px){#staff-workspace .staff-org{grid-template-columns:1fr}#staff-workspace .staff-account-list{grid-template-columns:1fr}}
